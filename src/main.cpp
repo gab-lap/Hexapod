@@ -56,7 +56,7 @@ void setup() {
 void loop() {
     // Legs keep updating/moving
     for (int i = 0; i < 6; i++) {
-        allLegs[i]->Loop();
+        allLegs[i]->Update();
     }
 
     every(100) {

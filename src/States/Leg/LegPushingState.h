@@ -12,7 +12,7 @@ public:
         : State<Leg>(initOwner, initMachine) {}
 
     void Enter() override;
-    void Loop() override;
+    void Update() override;
     void Exit() override;
     String GetName() override {
         String name = "LegPushingState";

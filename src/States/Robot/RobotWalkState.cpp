@@ -18,8 +18,9 @@ void RobotWalkState::Enter()
 {
 }
 
-void RobotWalkState::Loop()
+void RobotWalkState::Update()
 {
+    //leggi joystick input?
 }
 
 void RobotWalkState::Exit()

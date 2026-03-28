@@ -45,9 +45,9 @@ void Leg::SetAngles(LegAngles angles)
     Serial.println("Input angles are not safe");
 }
 
-void Leg::Loop()
+void Leg::Update()
 {
     if (stateMachine.currentState != nullptr) {
-        stateMachine.currentState->Loop();
+        stateMachine.currentState->Update();
     }
 }

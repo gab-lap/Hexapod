@@ -1,7 +1,11 @@
+#ifndef ROBOT_H
+#define ROBOT_H
+
 #include "StateMachine.h"
 #include "State.h"
 #include "RobotWalkState.h"
 #include "models.h"
+#include "GaitData.h"
 
 class Robot {
 public:
@@ -10,10 +14,14 @@ public:
     State<Robot>* standingState;
     State<Robot>* idleState;
     RobotWalkState walkState;
-    RobotPhysicalData physicalData;
+    RobotPhysicalData physicalData; // to add more variables, so far only height
+    const GaitData* currentGait;
     // add legs, maybe in a struct?
 
     Robot(RobotPhysicalData initPhysicalData);
     void Begin();
-    void Loop();
+    void Update();
+    void ChangeGait(const GaitData* newGait);
 };
+
+#endif

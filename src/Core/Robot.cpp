@@ -1,4 +1,5 @@
 #include "Robot.h"
+#include "GaitData.h"
 
 Robot::Robot(RobotPhysicalData initPhysicalData)
     :   physicalData(initPhysicalData),
@@ -7,12 +8,20 @@ Robot::Robot(RobotPhysicalData initPhysicalData)
         walkState(*this, stateMachine)
 {
     stateMachine.Initialize(&walkState); // to cahnge with sleep state
+    currentGait = &Gaits::Tripod;
 }
 
 void Robot::Begin()
 {
 }
 
-void Robot::Loop()
+void Robot::Update()
 {
+}
+
+void Robot::ChangeGait(const GaitData* newGait)
+{
+    currentGait = newGait;
+    Serial.print("Switched to gait: ");
+    Serial.println(currentGait->label);
 }

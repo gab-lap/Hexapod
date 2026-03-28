@@ -26,7 +26,7 @@ public:
     void Begin();
     void MoveToPosition(Vector3 position);
     void SetAngles(LegAngles angles);
-    void Loop();
+    void Update();
 };
 
 #endif

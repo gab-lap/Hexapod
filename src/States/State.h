@@ -15,7 +15,7 @@ public:
         : owner(initOwner), stateMachine(initMachine) {}
     
     virtual void Enter();
-    virtual void Loop();
+    virtual void Update();
     virtual void Exit();
     virtual String GetName();
 };

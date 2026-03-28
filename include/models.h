@@ -35,7 +35,7 @@ struct LegPhysicalData {
 };
 
 struct RobotPhysicalData {
-    float height = 0;
+    float height = 0; // bearingCapToPatternBasePlate
 };
 
 struct JoystickDataStream {

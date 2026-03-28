@@ -5,6 +5,7 @@
 #define R    46.4f
 #define LJ2  115.0f
 #define LJ3  200.0f
+#define NUM_LEGS 6
 
 #define SDA_PIN 21
 #define SCL_PIN 22

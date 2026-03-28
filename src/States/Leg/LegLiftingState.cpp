@@ -9,7 +9,7 @@ void LegLiftingState::Enter()
     cout << "Leg Lifting\n";
 }
 
-void LegLiftingState::Loop()
+void LegLiftingState::Update()
 {
     if (owner.legHeight <= 0) {
         stateMachine.ChangeState(&owner.sleeping);
