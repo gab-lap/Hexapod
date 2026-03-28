@@ -6,12 +6,10 @@
 #include "config.h"
 #include "utils.h"
 #include "models.h"
+#include "RC_Receiver.h"
 
-const int J2VRxPin = 35; // Analog pin for X-axis
-const int J2VRyPin = 34; // Analog pin for Y-axis
-const int J1VRxPin = 32; // Analog pin for X-axis
-const int J1VRyPin = 33; // Analog pin for Y-axis
 
+RC_Transmitter controller;
 // Servo driver
 Adafruit_PWMServoDriver pca = Adafruit_PWMServoDriver();
 
@@ -40,6 +38,8 @@ void setup() {
     backLeftLeg   = new Leg(new DriverServo(&pca, 12), new DriverServo(&pca, 13), new DriverServo(&pca, 14), LegPhysicalData(130.0f, 230.0f));
     backRightLeg  = new Leg(new DriverServo(&pca, 15), new PinServo(BR2_GPIO_PIN), new PinServo(BR3_GPIO_PIN), LegPhysicalData(130.0f, 310.0f));
     
+    // Controller begin
+    controller.Begin();
 
     // Map to array
     allLegs[0] = frontRightLeg; allLegs[1] = midRightLeg; allLegs[2] = backRightLeg;
@@ -58,18 +58,20 @@ void loop() {
     for (int i = 0; i < 6; i++) {
         allLegs[i]->Update();
     }
+    
+    controller.Update();
+    const RC_TransmitterData& joy = controller.GetData();
 
     every(100) {
-        int J1xValue = analogRead(J1VRxPin);
-        int J1yValue = analogRead(J1VRyPin);
-        int J2xValue = analogRead(J2VRxPin);
-        int J2yValue = analogRead(J2VRyPin);
-
-        Serial.print("J1 X:"); Serial.print(J1xValue);
-        Serial.print(" Y:");   Serial.print(J1yValue);
+        Serial.print("J1 X:"); Serial.print(joy.j1x);
+        Serial.print(" Y:");   Serial.print(joy.j1y);
         Serial.print("  |  ");
-        Serial.print("J2 X:"); Serial.print(J2xValue);
-        Serial.print(" Y:");   Serial.println(J2yValue);
+        Serial.print("J2 X:"); Serial.print(joy.j2x);
+        Serial.print(" Y:");   Serial.println(joy.j2y);
+        
+        if(!controller.isConnected()) {
+            Serial.println("!!! WARNING: Controller Disconnected !!!");
+        }
     }
 
     // Run only if someone typed something

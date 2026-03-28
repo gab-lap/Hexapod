@@ -12,4 +12,11 @@
 #define BR2_GPIO_PIN 25
 #define BR3_GPIO_PIN 26
 
+#define CE_PIN   4 
+#define CSN_PIN  5 
+
+#define SCK_PIN  18   
+#define MISO_PIN 19 
+#define MOSI_PIN 23
+
 #endif
