@@ -17,12 +17,21 @@ Leg::Leg(VirtualServo *j1, VirtualServo *j2, VirtualServo *j3, LegPhysicalData i
     stateMachine.Initialize(&sleeping); 
 }
 
+
 void Leg::Begin()
 {
     joint1->Begin();
     joint2->Begin();
     joint3->Begin();
 }
+
+
+void Leg::Update()
+{
+    if (stateMachine.currentState != nullptr)
+        stateMachine.currentState->Update();
+}
+
 
 void Leg::MoveToPosition(Vector3 position)
 {
@@ -33,6 +42,7 @@ void Leg::MoveToPosition(Vector3 position)
     }
     Serial.println("Input angles are not valid");
 }
+
 
 void Leg::SetAngles(LegAngles angles)
 {
@@ -45,9 +55,3 @@ void Leg::SetAngles(LegAngles angles)
     Serial.println("Input angles are not safe");
 }
 
-void Leg::Update()
-{
-    if (stateMachine.currentState != nullptr) {
-        stateMachine.currentState->Update();
-    }
-}

@@ -1,12 +1,11 @@
 #include "LegPushingState.h"
-#include <iostream>
 #include "Leg.h"
 
 using namespace std;
 
 void LegPushingState::Enter()
 {
-    cout << "Leg Pushing\n";
+    Serial.println("Leg Pushing\n");
 }
 
 void LegPushingState::Update()

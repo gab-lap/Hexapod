@@ -1,6 +1,7 @@
 #include "RC_Receiver.h"
 #include "config.h"
 
+
 RC_Transmitter::RC_Transmitter() : _radio(CE_PIN, CSN_PIN) {
     _lastReceiveTime = 0;
     memcpy(_address, "00001", 6);

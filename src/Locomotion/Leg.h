@@ -24,9 +24,9 @@ public:
 
     Leg(VirtualServo *j1, VirtualServo *j2, VirtualServo *j3, LegPhysicalData initPhysicalData);
     void Begin();
+    void Update();
     void MoveToPosition(Vector3 position);
     void SetAngles(LegAngles angles);
-    void Update();
 };
 
 #endif

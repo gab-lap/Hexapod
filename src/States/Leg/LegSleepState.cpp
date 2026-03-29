@@ -1,12 +1,11 @@
 #include "LegSleepState.h"
-#include <iostream>
 #include "Leg.h"
 
 using namespace std;
 
 void LegSleepState::Enter()
 {
-    cout << "Leg Sleeping\n";
+    Serial.println("Leg Sleeping\n");
 }
 
 void LegSleepState::Update()

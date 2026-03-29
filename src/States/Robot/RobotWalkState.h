@@ -16,6 +16,21 @@ public:
     String GetName() override {
         return "RobotWalkingState";
     }
+
+private:
+    int points = 1000;
+
+    Vector2 _leftJoystickTargetVector;
+    float _leftJoystickTargetMagnitude;
+
+    Vector2 _leftJoystickCurrentVector;
+    float _leftJoystickCurrentMagnitude;
+
+    Vector2 _rightJoystickTargetVector;
+    float _rightJoystickTargetMagnitude;
+
+    Vector2 _rightJoystickCurrentVector;
+    float _rightJoystickCurrentMagnitude;
 };
 
 #endif

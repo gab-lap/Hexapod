@@ -13,10 +13,14 @@ Robot::Robot(RobotPhysicalData initPhysicalData)
 
 void Robot::Begin()
 {
+    transmitter.Begin();
 }
 
 void Robot::Update()
 {
+    transmitter.Update();
+    if (stateMachine.currentState != nullptr)
+        stateMachine.currentState->Update();
 }
 
 void Robot::ChangeGait(const GaitData* newGait)

@@ -7,9 +7,9 @@
 #include "utils.h"
 #include "models.h"
 #include "RC_Receiver.h"
+#include "Robot.h"
 
 
-RC_Transmitter controller;
 // Servo driver
 Adafruit_PWMServoDriver pca = Adafruit_PWMServoDriver();
 
@@ -17,6 +17,9 @@ Adafruit_PWMServoDriver pca = Adafruit_PWMServoDriver();
 Leg* allLegs[6];
 Leg *frontRightLeg, *midRightLeg, *backRightLeg;
 Leg *frontLeftLeg, *midLeftLeg, *backLeftLeg;
+
+Robot *robot;
+
 
 
 void setup() {
@@ -38,8 +41,11 @@ void setup() {
     backLeftLeg   = new Leg(new DriverServo(&pca, 12), new DriverServo(&pca, 13), new DriverServo(&pca, 14), LegPhysicalData(130.0f, 230.0f));
     backRightLeg  = new Leg(new DriverServo(&pca, 15), new PinServo(BR2_GPIO_PIN), new PinServo(BR3_GPIO_PIN), LegPhysicalData(130.0f, 310.0f));
     
-    // Controller begin
-    controller.Begin();
+    // Remember to Robot begin
+    robot = new Robot(RobotPhysicalData());
+    robot->Begin();
+    Serial.print("DEBUG: Size of RC_TransmitterData: ");
+    Serial.println(sizeof(RC_TransmitterData));
 
     // Map to array
     allLegs[0] = frontRightLeg; allLegs[1] = midRightLeg; allLegs[2] = backRightLeg;
@@ -59,7 +65,8 @@ void loop() {
         allLegs[i]->Update();
     }
     
-    controller.Update();
+    robot->Update();
+    /*controller.Update();
     const RC_TransmitterData& joy = controller.GetData();
 
     every(100) {
@@ -72,7 +79,7 @@ void loop() {
         if(!controller.isConnected()) {
             Serial.println("!!! WARNING: Controller Disconnected !!!");
         }
-    }
+    }*/
 
     // Run only if someone typed something
     if (Serial.available() > 0) {

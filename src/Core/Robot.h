@@ -6,6 +6,7 @@
 #include "RobotWalkState.h"
 #include "models.h"
 #include "GaitData.h"
+#include "RC_receiver.h"
 
 class Robot {
 public:
@@ -16,6 +17,7 @@ public:
     RobotWalkState walkState;
     RobotPhysicalData physicalData; // to add more variables, so far only height
     const GaitData* currentGait;
+    RC_Transmitter transmitter;
     // add legs, maybe in a struct?
 
     Robot(RobotPhysicalData initPhysicalData);

@@ -6,15 +6,26 @@
 #include <RF24.h>
 
 
-// RC transmitter data structure
-struct RC_TransmitterData {
-    int j1x = 2048;
-    int j1y = 2048;
-    int j2x = 2048;
-    int j2y = 2048;
+struct JoysticksRestingPositions {
+    int j1x, j1y, j2x, j2y;
 };
 
+// RC transmitter data structure
+struct RC_TransmitterData {
+    uint8_t j1x;
+    uint8_t j1y;
+    uint8_t j2x;
+    uint8_t j2y;
+};
+
+
 class RC_Transmitter {
+private:
+    RF24 _radio;
+    RC_TransmitterData _currentData;
+    unsigned long _lastReceiveTime;
+    uint8_t _address[6];
+    
 public:
     RC_Transmitter();
     void Begin();
@@ -26,12 +37,7 @@ public:
     
     // Verify if RC transmitter is connected
     bool isConnected() { return (millis() - _lastReceiveTime) < 500; }
-
-private:
-    RF24 _radio;
-    RC_TransmitterData _currentData;
-    unsigned long _lastReceiveTime;
-    uint8_t _address[6];
+    
 };
 
 #endif
