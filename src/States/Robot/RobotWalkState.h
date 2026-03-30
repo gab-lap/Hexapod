@@ -2,6 +2,9 @@
 #define ROBOT_WALK_STATE_H
 
 #include "State.h"
+#include "vectors.h"
+#include "config.h"
+#include "models.h"
 
 class Robot;
 
@@ -17,8 +20,10 @@ public:
         return "RobotWalkingState";
     }
 
+    Vector3 getGaitPoint(Leg* leg, float pushfraction);
+
 private:
-    int points = 1000;
+    int _points = 1000;
 
     Vector2 _leftJoystickTargetVector;
     float _leftJoystickTargetMagnitude;
@@ -31,6 +36,9 @@ private:
 
     Vector2 _rightJoystickCurrentVector;
     float _rightJoystickCurrentMagnitude;
+
+    float _forwardAmount;
+    float _turnAmount;
 };
 
 #endif

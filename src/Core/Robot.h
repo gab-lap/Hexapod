@@ -19,11 +19,13 @@ public:
     const GaitData* currentGait;
     RC_Transmitter transmitter;
     // add legs, maybe in a struct?
+    RobotLegs robotLegs;
 
-    Robot(RobotPhysicalData initPhysicalData);
+    Robot(RobotPhysicalData initPhysicalData, RobotLegs initRobotLegs);
     void Begin();
     void Update();
     void ChangeGait(const GaitData* newGait);
+    Leg* getLeg(int index);
 };
 
 #endif

@@ -34,15 +34,15 @@ void setup() {
     pca.setPWMFreq(50);
 
     // Leg objects
-    midRightLeg   = new Leg(new DriverServo(&pca, 0), new DriverServo(&pca, 1), new DriverServo(&pca, 2), LegPhysicalData(110.0f, 0.0f));
-    frontRightLeg = new Leg(new DriverServo(&pca, 3), new DriverServo(&pca, 4), new DriverServo(&pca, 5), LegPhysicalData(130.0f, 50.0f));
-    frontLeftLeg  = new Leg(new DriverServo(&pca, 6), new DriverServo(&pca, 7), new DriverServo(&pca, 8), LegPhysicalData(130.0f, 130.0f));
-    midLeftLeg    = new Leg(new DriverServo(&pca, 9), new DriverServo(&pca, 10), new DriverServo(&pca, 11), LegPhysicalData(110.0f, 180.0f));
-    backLeftLeg   = new Leg(new DriverServo(&pca, 12), new DriverServo(&pca, 13), new DriverServo(&pca, 14), LegPhysicalData(130.0f, 230.0f));
-    backRightLeg  = new Leg(new DriverServo(&pca, 15), new PinServo(BR2_GPIO_PIN), new PinServo(BR3_GPIO_PIN), LegPhysicalData(130.0f, 310.0f));
+    midRightLeg   = new Leg(new DriverServo(&pca, 0), new DriverServo(&pca, 1), new DriverServo(&pca, 2), LegPhysicalData(110.0f, 0.0f, 1));
+    frontRightLeg = new Leg(new DriverServo(&pca, 3), new DriverServo(&pca, 4), new DriverServo(&pca, 5), LegPhysicalData(130.0f, 50.0f, 1));
+    frontLeftLeg  = new Leg(new DriverServo(&pca, 6), new DriverServo(&pca, 7), new DriverServo(&pca, 8), LegPhysicalData(130.0f, 130.0f, -1));
+    midLeftLeg    = new Leg(new DriverServo(&pca, 9), new DriverServo(&pca, 10), new DriverServo(&pca, 11), LegPhysicalData(110.0f, 180.0f, -1));
+    backLeftLeg   = new Leg(new DriverServo(&pca, 12), new DriverServo(&pca, 13), new DriverServo(&pca, 14), LegPhysicalData(130.0f, 230.0f, -1));
+    backRightLeg  = new Leg(new DriverServo(&pca, 15), new PinServo(BR2_GPIO_PIN), new PinServo(BR3_GPIO_PIN), LegPhysicalData(130.0f, 310.0f, 1));
     
     // Remember to Robot begin
-    robot = new Robot(RobotPhysicalData());
+    robot = new Robot(RobotPhysicalData(), RobotLegs(midRightLeg, frontRightLeg, frontLeftLeg, midLeftLeg, backLeftLeg, backRightLeg));
     robot->Begin();
     Serial.print("DEBUG: Size of RC_TransmitterData: ");
     Serial.println(sizeof(RC_TransmitterData));

@@ -24,6 +24,7 @@ struct GaitData {
     float pushFraction;
     //float liftFraction = 1 - pushFraction;
     float maxStepLength;
+    float maxRotationLength;
     float liftHeight;
 
     float stepLengthMultiplier;

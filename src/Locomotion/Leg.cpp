@@ -38,6 +38,7 @@ void Leg::MoveToPosition(Vector3 position)
     LegAngles angles = ik(position);
     if (angles.isValid()) {
         SetAngles(angles);
+        walkingData.currentLegPosition = position;
         return;
     }
     Serial.println("Input angles are not valid");

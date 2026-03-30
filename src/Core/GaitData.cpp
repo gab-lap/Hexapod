@@ -8,6 +8,7 @@ namespace Gaits {
         1000.0f, // Cycle Duration
         0.55f,              // pushFraction (50% a terra)
         200.0f,             // maxStepLength
+        80.0f,
         100.0f,             // liftHeight
         1.1f,              // stepLengthMultiplier
         1.1f               // cycleSpeedMultiplier
@@ -20,6 +21,7 @@ namespace Gaits {
         1000.0f,
         0.6f,               // pushFraction       // 0.66f
         200.0f,             // maxStepLength
+        80.0f,
         100.0f,             // liftHeight
         1.1f,              // stepLengthMultiplier
         1.1f               // cycleSpeedMultiplier
@@ -32,6 +34,7 @@ namespace Gaits {
         1000.0f,  //3000.0f
         0.83f,             // pushFraction
         200.0f,             // maxStepLength
+        80.0f,
         130.0f,             // liftHeight
         1.4f,              // stepLengthMultiplier  // 0.8
         0.5f               // cycleSpeedMultiplier

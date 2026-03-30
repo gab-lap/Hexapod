@@ -21,6 +21,10 @@ public:
     VirtualServo *joint1, *joint2, *joint3;
     float legHeight = 0.0f;
     LegPhysicalData physicalData;
+    LegWalkingData walkingData;
+    // ADD INTERFACE VARIABLE TO USE IN ROBOTWALKSTATE
+    // EACH LEG'S MOVEMENT STATE CHANGES IT; AND WITH IT WE GET DIFFERENT
+    // METHODS, TO EITHER CALCULATE WALK PATH WHEN PUSHING OR WHEN LIFTING (in GetGaitPoint function)
 
     Leg(VirtualServo *j1, VirtualServo *j2, VirtualServo *j3, LegPhysicalData initPhysicalData);
     void Begin();
