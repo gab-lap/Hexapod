@@ -7,8 +7,8 @@ namespace Gaits {
         {0.5f, 0.0f, 0.5f, 0.0f, 0.5f, 0.0f}, // MR, FR, and so on counterclockwise...
         1000.0f, // Cycle Duration
         0.55f,              // pushFraction (50% a terra)
-        200.0f,             // maxStepLength
-        80.0f,
+        150.0f,             // maxStepLength
+        80.0f,              // maxRotationLength
         100.0f,             // liftHeight
         1.1f,              // stepLengthMultiplier
         1.1f               // cycleSpeedMultiplier

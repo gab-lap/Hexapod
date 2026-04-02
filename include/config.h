@@ -19,4 +19,6 @@
 #define MISO_PIN 19 
 #define MOSI_PIN 23
 
+const float globalSpeedMultiplier = 0.25;
+
 #endif

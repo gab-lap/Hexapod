@@ -7,11 +7,12 @@
 #include "models.h"
 #include "GaitData.h"
 #include "RC_receiver.h"
+#include "RobotSleepState.h"
 
 class Robot {
 public:
     StateMachine<Robot> stateMachine;
-    State<Robot>* sleepState;  // change from pointers to normal variables once specific state files are created
+    RobotSleepState sleepState;  // change from pointers to normal variables once specific state files are created
     State<Robot>* standingState;
     State<Robot>* idleState;
     RobotWalkState walkState;

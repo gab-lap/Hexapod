@@ -10,7 +10,7 @@ void LegStandingState::Enter()
 
 void LegStandingState::Update()
 {
-    if (owner.legHeight <= 0) {
+    if (owner.ONorOFF <= 0) {
         stateMachine.ChangeState(&owner.standing);
         return;
     }

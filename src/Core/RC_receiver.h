@@ -12,10 +12,10 @@ struct JoysticksRestingPositions {
 
 // RC transmitter data structure
 struct RC_TransmitterData {
-    uint8_t j1x;
-    uint8_t j1y;
-    uint8_t j2x;
-    uint8_t j2y;
+    uint8_t j1x = 0;
+    uint8_t j1y = 0;
+    uint8_t j2x = 0;
+    uint8_t j2y = 0;
 };
 
 

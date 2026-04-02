@@ -10,8 +10,8 @@ void LegSleepState::Enter()
 
 void LegSleepState::Update()
 {
-    if (owner.legHeight > 0) {
-        stateMachine.ChangeState(&owner.lifting);
+    if (owner.ONorOFF == 1) {
+        stateMachine.ChangeState(&owner.pushing);
         return;
     }
 }

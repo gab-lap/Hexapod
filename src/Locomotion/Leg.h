@@ -19,7 +19,7 @@ public:
     LegPushingState pushing;
     LegLiftingState lifting;
     VirtualServo *joint1, *joint2, *joint3;
-    float legHeight = 0.0f;
+    float ONorOFF = 0.0f;
     LegPhysicalData physicalData;
     LegWalkingData walkingData;
     // ADD INTERFACE VARIABLE TO USE IN ROBOTWALKSTATE

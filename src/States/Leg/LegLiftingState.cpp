@@ -5,14 +5,20 @@ using namespace std;
 
 void LegLiftingState::Enter()
 {
-    Serial.println("Leg Lifting\n");
+    Serial.println("Leg Starts Lifting\n");
+    owner.walkingData.cycleStartPoint = owner.walkingData.currentLegPosition;
 }
 
 void LegLiftingState::Update()
 {
-    if (owner.legHeight <= 0) {
+    if (owner.ONorOFF <= 0) {
         stateMachine.ChangeState(&owner.sleeping);
         return;
+    }
+
+    if (owner.walkingData.t < owner.walkingData.pushFraction) {
+        owner.stateMachine.ChangeState(&owner.pushing);
+        return;        
     }
 }
 

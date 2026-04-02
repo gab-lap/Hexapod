@@ -15,12 +15,22 @@ void RobotWalkState::Enter()
     for (int i = 0; i < NUM_LEGS; i++) {
         Leg* leg = owner.getLeg(i);
         leg->walkingData.cycleProgress = owner.currentGait->cycleOffsets[i] * _points;
+
+        // Force legs into walking state when robot enters walk state
+        if (leg->walkingData.t < leg->walkingData.pushFraction)
+            leg->stateMachine.ChangeState(&leg->pushing);
+        else
+            leg->stateMachine.ChangeState(&leg->lifting);
     }
 }
 
 void RobotWalkState::Update()
 {
     // ricorda di definire logica di cambio stato
+    if (owner.getLeg(0)->ONorOFF == 0) {
+        stateMachine.ChangeState(&owner.sleepState);
+        return;
+    }
 
     const RC_TransmitterData& transmitterData = owner.transmitter.GetData();  
 
@@ -65,15 +75,34 @@ void RobotWalkState::Update()
     
     _rightJoystickCurrentVector = lerp(_rightJoystickCurrentVector, _rightJoystickTargetVector, 0.06);
     _rightJoystickCurrentMagnitude = lerp(_rightJoystickCurrentMagnitude, _rightJoystickTargetMagnitude, 0.06);
+    
+    
+    _forwardAmount = _leftJoystickCurrentMagnitude;
+    _turnAmount = _rightJoystickCurrentVector.x;
+    
+    float progressChangeAmount = max(_forwardAmount, abs(_turnAmount)) * owner.currentGait->cycleSpeedMultiplier * globalSpeedMultiplier;
+    
+    for (int i = 0; i < NUM_LEGS; i++) {
+        Leg* leg = owner.getLeg(i);
+        
+        // Incrementa il progresso
+        leg->walkingData.cycleProgress += progressChangeAmount;
 
+        // Reset del ciclo se supera il limite (es. 1000 punti)
+        if (leg->walkingData.cycleProgress >= _points) {
+            leg->walkingData.cycleProgress -= _points;
+            // Importante: qui dovresti anche aggiornare cycleStartPoint con la posizione attuale
+        }
+
+        leg->walkingData.t = (float)leg->walkingData.cycleProgress / _points;
+        leg->Update();
+    }
 
     for (int i = 0; i < NUM_LEGS; i++) {
         Leg* leg = owner.getLeg(i);
-        leg->walkingData.t = (float) leg->walkingData.cycleProgress / _points;
+        
+        leg->MoveToPosition(getGaitPoint(leg, leg->walkingData.pushFraction)); // Can remove parameter from function and just access to pushfraction from leg in the function (to change)
     }
-
-    _forwardAmount = _leftJoystickCurrentMagnitude;
-    _turnAmount = _rightJoystickCurrentVector.x;
 
 
     // REMEMBER WHEN UPDATING THE WALK CYCLE VARIABLES, ONCE THE WALK CYCLE ENDED, TO UPDATE THE GAIT DATA 
@@ -89,7 +118,7 @@ Vector3 RobotWalkState::getGaitPoint(Leg *leg, float pushFraction)
     // Normalize right joystick
     float normRxJoystickX = _rightJoystickCurrentVector.x / 100.0f;
     // Exponential mapping
-    float expoRxJoyX = (normRxJoystickX >= 0 ? 1 : -1) * (normRxJoystickX * normRxJoystickX);
+    float expoRxJoyX = (normRxJoystickX >= 0 ? 1 : -1) * (normRxJoystickX * normRxJoystickX); // Remember to remove or change exponential mapping also forthis
     // Apply exponential mapping
     float rotationLength = owner.currentGait->maxRotationLength * expoRxJoyX;
 
@@ -98,71 +127,136 @@ Vector3 RobotWalkState::getGaitPoint(Leg *leg, float pushFraction)
     float normLxJoystickX = _leftJoystickCurrentVector.x / 100.f;
     float normLxJoystickY = _leftJoystickCurrentVector.y / 100.f;
     // Exponential mapping of each axis
-    float expoLxJoyX = (normLxJoystickX >= 0 ? 1 : -1) * (normLxJoystickX * normLxJoystickX);
-    float expoLxJoyY = (normLxJoystickY >= 0 ? 1 : -1) * (normLxJoystickY * normLxJoystickY);
+    float expoLxJoyX = normLxJoystickX;//(normLxJoystickX >= 0 ? 1 : -1) * (normLxJoystickX * normLxJoystickX);
+    float expoLxJoyY = normLxJoystickY;//(normLxJoystickY >= 0 ? 1 : -1) * (normLxJoystickY * normLxJoystickY);
     // Resulting exponential vector to apply
     Vector2 expo = Vector2(expoLxJoyX, expoLxJoyY);
     // Applying the exponential vector
     Vector2 stepLength = expo * owner.currentGait->maxStepLength;
     // Constrain the result
-    stepLength.y = constrain(stepLength.y, -owner.currentGait->maxStepLength/2, owner.currentGait->maxStepLength/2);
     stepLength.x = constrain(stepLength.x, -owner.currentGait->maxStepLength, owner.currentGait->maxStepLength);
+    stepLength.y = constrain(stepLength.y, -owner.currentGait->maxStepLength/2, owner.currentGait->maxStepLength/2);
 
 
     float t = leg->walkingData.t;
-    Vector3 finalPoint;
+    float stepMag = abs(expoLxJoyX) + abs(expoLxJoyY); // Left Joystick force
+    float rotationMag = abs(expoRxJoyX);                // Right Joystick force
+    float totalMag = stepMag + rotationMag;             // total force
     
+    // LEG PUSHING
     if (t < pushFraction) {
         // Map the pushFraction to be a range from 0.0 to 1.0
         float localT = mapFloat(t, 0, pushFraction, 0, 1);
 
-        float targetStepX = stepLength.x * leg->physicalData.position_multiplier;
-        float targetStepY = stepLength.y * leg->physicalData.position_multiplier;
+        // -------------------- DRAG STEP --------------------
 
+        // Array containing the control points for stepping in a straight line
         Vector3 stepControlPoints[2];
+        // First Control Point
         stepControlPoints[0] = leg->walkingData.cycleStartPoint;
-        stepControlPoints[1] = Vector3(
-                                       targetStepX,
-                                      -targetStepY + leg->walkingData.distanceFromCenter, // targetStepY is negated because a leg, to make the body move forward, has to push the opposite way
-                                       owner.physicalData.distanceFromGround                                        
-                                      ).rotateZ(leg->physicalData.globalLegMountAngle, Vector3(0, leg->walkingData.distanceFromCenter, 0));
+        // Second Control Point
+        float targetStepX = stepLength.y * leg->physicalData.position_multiplier;
+        float targetStepY = stepLength.x * leg->physicalData.position_multiplier;
 
+        stepControlPoints[1] = Vector3(
+                                        targetStepX,
+                                       -targetStepY + leg->walkingData.distanceFromCenter, // targetStepY is negated because a leg, to make the body move forward, has to push the opposite way
+                                        owner.physicalData.distanceFromGround                                        
+                                    ).rotateZ(/*leg->physicalData.globalLegMountAngle*/55.0 * leg->physicalData.rotation_multiplier, Vector3(0, leg->walkingData.distanceFromCenter, 0));
+        
+        // Resulting Vector for Stepping in a straight line
         Vector3 stepPoint = GetPointOnBezierCurve(stepControlPoints, 2, localT);
 
+        // -------------------- DRAG ROTATE --------------------
 
+        // Array containing the control points for rotation
         Vector3 rotationControlPoints[3];
+        // First Control Point
         rotationControlPoints[0] = leg->walkingData.cycleStartPoint;
+        // Second Control Point
         rotationControlPoints[1] = Vector3(
-                                           0,
-                                           leg->walkingData.distanceFromCenter,
-                                           owner.physicalData.distanceFromGround
-                                          );
+                                            0,
+                                            leg->walkingData.distanceFromCenter,
+                                            owner.physicalData.distanceFromGround
+                                        );
+        // Third Control Point
         rotationControlPoints[2] = Vector3(
-                                           rotationLength,
-                                           leg->walkingData.distanceFromCenter,
-                                           owner.physicalData.distanceFromGround
-                                          );
-                                        
+                                            rotationLength,
+                                            leg->walkingData.distanceFromCenter,
+                                            owner.physicalData.distanceFromGround
+                                        );
+        // Resulting Vector for Rotating                                
         Vector3 rotationPoint = GetPointOnBezierCurve(rotationControlPoints, 3, localT);
 
-        float stepMag = abs(expoLxJoyX) + abs(expoLxJoyY); // Forza del joystick movimento
-        float rotationMag = abs(expoRxJoyX);                  // Forza del joystick rotazione
-        float totalMag = stepMag + rotationMag;
-
-        if (totalMag > 0.01f) {
-            finalPoint = (stepPoint * stepMag + rotationPoint * rotationMag) / totalMag;
-        } else {
-            // not moving
-            finalPoint = leg->walkingData.cycleStartPoint;
-        }
-
+        // If any joystick is being moved return the weighted average of the two points
+        // else return the start point of the cycle
+        if (totalMag > 0.01f) 
+            return (stepPoint * stepMag + rotationPoint * rotationMag) / totalMag;
+        else 
+            return leg->walkingData.cycleStartPoint;
     }
+    // LEG LIFTING
     else {
+        float localT = mapFloat(t, pushFraction, 1, 0, 1);
+        float liftHeight = owner.currentGait->liftHeight; 
+        float landHeight = 15.0f; // Sostituisci con la variabile reale del tuo robot, es: owner.physicalData.legLandHeight
 
+        // -------------------- LIFT STEP --------------------
+
+        // Array containing the control points for stepping
+        Vector3 strafeControlPoints[4];
+        // First Control Point
+        strafeControlPoints[0] = leg->walkingData.cycleStartPoint;
+        // Second Control Point
+        strafeControlPoints[1] = leg->walkingData.cycleStartPoint + Vector3(0, 0, liftHeight);
+        // Third Control Point
+        strafeControlPoints[2] = Vector3(
+                                        -stepLength.y * leg->physicalData.position_multiplier,
+                                        stepLength.x * leg->physicalData.position_multiplier + leg->walkingData.distanceFromCenter,
+                                        owner.physicalData.distanceFromGround + landHeight
+                                    ).rotateZ(/*leg->physicalData.globalLegMountAngle*/55.0 * leg->physicalData.rotation_multiplier, Vector3(0, leg->walkingData.distanceFromCenter, 0));
+        // Fourth Control Point
+        strafeControlPoints[3] = Vector3(
+                                        -stepLength.y * leg->physicalData.position_multiplier,
+                                        stepLength.x * leg->physicalData.position_multiplier + leg->walkingData.distanceFromCenter,
+                                        owner.physicalData.distanceFromGround
+                                    ).rotateZ(/*leg->physicalData.globalLegMountAngle*/55.0 * leg->physicalData.rotation_multiplier, Vector3(0, leg->walkingData.distanceFromCenter, 0));
+        // Resulting Vector for Stepping
+        Vector3 straightPoint = GetPointOnBezierCurve(strafeControlPoints, 4, localT);
+
+        // -------------------- LIFT ROTATE --------------------
+
+        // Array containing the control points for rotating
+        Vector3 rotateControlPoints[5];
+        // First Control Point
+        rotateControlPoints[0] = leg->walkingData.cycleStartPoint;
+        // Second Control Point
+        rotateControlPoints[1] = leg->walkingData.cycleStartPoint + Vector3(0, 0, liftHeight);
+        // Third Control Point
+        rotateControlPoints[2] = Vector3(
+            0,
+            leg->walkingData.distanceFromCenter,
+            owner.physicalData.distanceFromGround + liftHeight
+        );
+        // Fourth Control Point
+        rotateControlPoints[3] = Vector3(
+            -rotationLength,
+            leg->walkingData.distanceFromCenter,
+            owner.physicalData.distanceFromGround + landHeight
+        );
+        // Fifth Control Point
+        rotateControlPoints[4] = Vector3(
+            -rotationLength,
+            leg->walkingData.distanceFromCenter,
+            owner.physicalData.distanceFromGround
+        );
+        // Resulting Vector for Rotating
+        Vector3 rotatePoint = GetPointOnBezierCurve(rotateControlPoints, 5, localT);
+
+        if (totalMag > 0.01f)
+            return (straightPoint * stepMag + rotatePoint * rotationMag) / totalMag;
+        else
+            // Se fermo, torna dolcemente alla posizione neutra (0, distCenter, Ground)
+            return GetPointOnBezierCurve(strafeControlPoints, 4, localT);
     }
-
-
-
-
-    return Vector3();
 }

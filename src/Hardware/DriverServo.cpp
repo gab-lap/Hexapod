@@ -15,6 +15,7 @@ void DriverServo::Begin()
 
 void DriverServo::WriteAngle(float angle)
 {
-    float pulse = map(angle + offset, 0, 180, minUs, maxUs);
-    _pwmDriver->setPWM(_channel, 0, pulse);
+    float pulseUs = map(angle + offset, 0, 180, minUs, maxUs);
+    int ticks = (int)(pulseUs * 4096.0 / 20000.0);
+    _pwmDriver->setPWM(_channel, 0, ticks);
 }

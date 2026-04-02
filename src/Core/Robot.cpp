@@ -1,15 +1,23 @@
 #include "Robot.h"
 #include "GaitData.h"
+#include "Leg.h"
 
 Robot::Robot(RobotPhysicalData initPhysicalData, RobotLegs initRobotLegs)
     :   physicalData(initPhysicalData),
         robotLegs(initRobotLegs),
 
         stateMachine(),
-        walkState(*this, stateMachine)
+        walkState(*this, stateMachine),
+        sleepState(*this, stateMachine)
 {
-    stateMachine.Initialize(&walkState); // to cahnge with sleep state
+    stateMachine.Initialize(&sleepState); // to cahnge with sleep state
     currentGait = &Gaits::Tripod;
+    // Set pushFraction in all the legs
+    for (int i = 0; i < NUM_LEGS; i++) {
+        Leg* leg = getLeg(i);
+        leg->walkingData.pushFraction = currentGait->pushFraction;
+        leg->walkingData.currentLegPosition = Vector3(0, 200, 100);
+    }
 }
 
 void Robot::Begin()
@@ -27,6 +35,11 @@ void Robot::Update()
 void Robot::ChangeGait(const GaitData* newGait)
 {
     currentGait = newGait;
+    // update pushFraction in leg every time robot changes state
+    for (int i = 0; i < NUM_LEGS; i++) {
+        Leg* leg = getLeg(i);
+        leg->walkingData.pushFraction = currentGait->pushFraction;
+    }
     Serial.print("Switched to gait: ");
     Serial.println(currentGait->label);
 }
