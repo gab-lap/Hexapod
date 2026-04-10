@@ -29,9 +29,9 @@ LegAngles ik(Vector3 target) {
     float a2 = degrees(A2_rad);
     float a3 = degrees(A3_rad);
 
-    a1 = 90.0f + a1;  //remember to remove the offsets (will be handled in the servo class)
-    a2 = 45.0f + a2;
-    a3 = 160.0f - a3; // -20 deg for tibia construction
+    a1 = 90.0f - a1;  //remember to remove the offsets (will be handled in the servo class)
+    a2 = 52.0f + a2;
+    a3 = 157.5f - a3; // -22.5 deg for tibia construction
 
     a1 = constrain(a1, 30.0f, 150.0f);
     a3 = constrain(a3,  0.0f, 130.0f);

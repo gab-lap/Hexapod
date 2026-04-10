@@ -9,6 +9,7 @@ public:
 
     virtual void Begin() = 0;
     virtual void WriteAngle(float angle) = 0;
+    virtual void SetMicroseconds(int initMinUs, int initMaxUs) = 0;
 };
 
 #endif

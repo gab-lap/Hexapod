@@ -14,6 +14,7 @@ public:
 
     void Begin() override;
     void WriteAngle(float angle) override;
+    void SetMicroseconds(int initMinUs, int initMaxUs) override;
 };
 
 #endif

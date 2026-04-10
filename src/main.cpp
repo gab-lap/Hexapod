@@ -36,12 +36,19 @@ void setup() {
     pca.setPWMFreq(50);
 
     // Leg objects
-    midRightLeg   = new Leg(new DriverServo(&pca, 0), new DriverServo(&pca, 1), new DriverServo(&pca, 2), LegPhysicalData(110.0f, 0.0f, 1, 0));
-    frontRightLeg = new Leg(new DriverServo(&pca, 3), new DriverServo(&pca, 4), new DriverServo(&pca, 5), LegPhysicalData(130.0f, 50.0f, 1, 1));
-    frontLeftLeg  = new Leg(new DriverServo(&pca, 6), new DriverServo(&pca, 7), new DriverServo(&pca, 8), LegPhysicalData(130.0f, 130.0f, -1, -1));
-    midLeftLeg    = new Leg(new DriverServo(&pca, 9), new DriverServo(&pca, 10), new DriverServo(&pca, 11), LegPhysicalData(110.0f, 180.0f, -1, 0));
-    backLeftLeg   = new Leg(new DriverServo(&pca, 12), new DriverServo(&pca, 13), new DriverServo(&pca, 14), LegPhysicalData(130.0f, 230.0f, -1, 1));
-    backRightLeg  = new Leg(new DriverServo(&pca, 15), new PinServo(BR2_GPIO_PIN), new PinServo(BR3_GPIO_PIN), LegPhysicalData(130.0f, 310.0f, 1, -1));
+    midRightLeg   = new Leg(new DriverServo(&pca, 0), new DriverServo(&pca, 1), new DriverServo(&pca, 2), LegPhysicalData(98.0f, 0.0f, 1, 0));
+    frontRightLeg = new Leg(new DriverServo(&pca, 3), new DriverServo(&pca, 4), new DriverServo(&pca, 5), LegPhysicalData(110.0f, 50.0f, 1, 1));
+    frontLeftLeg  = new Leg(new DriverServo(&pca, 6), new DriverServo(&pca, 7), new DriverServo(&pca, 8), LegPhysicalData(110.0f, 130.0f, -1, -1));
+    midLeftLeg    = new Leg(new DriverServo(&pca, 9), new DriverServo(&pca, 10), new DriverServo(&pca, 11), LegPhysicalData(98.0f, 180.0f, -1, 0));
+    backLeftLeg   = new Leg(new DriverServo(&pca, 12), new DriverServo(&pca, 13), new DriverServo(&pca, 14), LegPhysicalData(110.0f, 230.0f, -1, 1));
+    backRightLeg  = new Leg(new DriverServo(&pca, 15), new PinServo(BR2_GPIO_PIN), new PinServo(BR3_GPIO_PIN), LegPhysicalData(110.0f, 310.0f, 1, -1));
+
+    //midRightLeg->joint1->SetMicroseconds(620, 2500); midRightLeg->joint2->SetMicroseconds(500, 2400); midRightLeg->joint3->SetMicroseconds(450, 2400);
+    //frontRightLeg->joint1->SetMicroseconds(600, 2420); frontRightLeg->joint2->SetMicroseconds(500, 2500); frontRightLeg->joint3->SetMicroseconds(500, 2500);
+    //frontLeftLeg->joint1->SetMicroseconds(500, 2500); frontLeftLeg->joint2->SetMicroseconds(500, 2500); frontLeftLeg->joint3->SetMicroseconds(500, 2500);
+    //midLeftLeg->joint1->SetMicroseconds(500, 2500); midLeftLeg->joint2->SetMicroseconds(500, 2400); midLeftLeg->joint3->SetMicroseconds(500, 2500);
+    //backLeftLeg->joint1->SetMicroseconds(500, 2500); backLeftLeg->joint2->SetMicroseconds(500, 2500); backLeftLeg->joint3->SetMicroseconds(500, 2500);
+    //backRightLeg->joint1->SetMicroseconds(500, 2400); backRightLeg->joint2->SetMicroseconds(500, 2500); backRightLeg->joint3->SetMicroseconds(500, 2500);
     
     // Remember to Robot begin
     robot = new Robot(RobotPhysicalData(), RobotLegs(midRightLeg, frontRightLeg, frontLeftLeg, midLeftLeg, backLeftLeg, backRightLeg));

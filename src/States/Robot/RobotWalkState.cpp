@@ -115,10 +115,14 @@ void RobotWalkState::Exit()
 
 Vector3 RobotWalkState::getGaitPoint(Leg *leg, float pushFraction)
 {
+    if (_leftJoystickCurrentMagnitude < 0.5f && abs(_rightJoystickCurrentVector.x) < 0.5f) {
+        return leg->walkingData.currentLegPosition; 
+    }
+
     // Normalize right joystick
     float normRxJoystickX = _rightJoystickCurrentVector.x / 100.0f;
     // Exponential mapping
-    float expoRxJoyX = (normRxJoystickX >= 0 ? 1 : -1) * (normRxJoystickX * normRxJoystickX); // Remember to remove or change exponential mapping also forthis
+    float expoRxJoyX = normRxJoystickX; //(normRxJoystickX >= 0 ? 1 : -1) * (normRxJoystickX * normRxJoystickX); // Remember to remove or change exponential mapping also forthis
     // Apply exponential mapping
     float rotationLength = owner.currentGait->maxRotationLength * expoRxJoyX;
 
@@ -132,7 +136,7 @@ Vector3 RobotWalkState::getGaitPoint(Leg *leg, float pushFraction)
     // Resulting exponential vector to apply
     Vector2 expo = Vector2(expoLxJoyX, expoLxJoyY);
     // Applying the exponential vector
-    Vector2 stepLength = expo * owner.currentGait->maxStepLength;
+    Vector2 stepLength = expo * owner.currentGait->maxStepLength * owner.currentGait->stepLengthMultiplier;
     // Constrain the result
     stepLength.x = constrain(stepLength.x, -owner.currentGait->maxStepLength, owner.currentGait->maxStepLength);
     stepLength.y = constrain(stepLength.y, -owner.currentGait->maxStepLength/2, owner.currentGait->maxStepLength/2);
@@ -142,6 +146,8 @@ Vector3 RobotWalkState::getGaitPoint(Leg *leg, float pushFraction)
     float stepMag = abs(expoLxJoyX) + abs(expoLxJoyY); // Left Joystick force
     float rotationMag = abs(expoRxJoyX);                // Right Joystick force
     float totalMag = stepMag + rotationMag;             // total force
+    if (totalMag < 0.0001f) 
+        totalMag = 0.0001f;
     
     // LEG PUSHING
     if (t < pushFraction) {
@@ -190,10 +196,11 @@ Vector3 RobotWalkState::getGaitPoint(Leg *leg, float pushFraction)
 
         // If any joystick is being moved return the weighted average of the two points
         // else return the start point of the cycle
-        if (totalMag > 0.01f) 
-            return (stepPoint * stepMag + rotationPoint * rotationMag) / totalMag;
-        else 
-            return leg->walkingData.cycleStartPoint;
+
+        //if (totalMag > 0.01f) 
+        return (stepPoint * stepMag + rotationPoint * rotationMag) / totalMag;
+        //else 
+        //    return leg->walkingData.cycleStartPoint;
     }
     // LEG LIFTING
     else {
@@ -253,10 +260,10 @@ Vector3 RobotWalkState::getGaitPoint(Leg *leg, float pushFraction)
         // Resulting Vector for Rotating
         Vector3 rotatePoint = GetPointOnBezierCurve(rotateControlPoints, 5, localT);
 
-        if (totalMag > 0.01f)
-            return (straightPoint * stepMag + rotatePoint * rotationMag) / totalMag;
-        else
+        //if (totalMag > 0.01f)
+        return (straightPoint * stepMag + rotatePoint * rotationMag) / totalMag;
+        //else
             // Se fermo, torna dolcemente alla posizione neutra (0, distCenter, Ground)
-            return GetPointOnBezierCurve(strafeControlPoints, 4, localT);
+        //    return GetPointOnBezierCurve(strafeControlPoints, 4, localT);
     }
 }

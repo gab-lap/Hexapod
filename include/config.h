@@ -2,9 +2,9 @@
 #define CONFIG_H
 
 // Physical Robot Dimensions in mm
-#define R    46.4f
-#define LJ2  115.0f
-#define LJ3  200.0f
+#define R    45.1f
+#define LJ2  100.0f
+#define LJ3  174.0f
 #define NUM_LEGS 6
 
 #define SDA_PIN 21

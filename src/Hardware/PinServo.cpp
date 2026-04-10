@@ -16,3 +16,9 @@ void PinServo::WriteAngle(float angle)
 {
     _servo.write(angle + offset);
 }
+
+void PinServo::SetMicroseconds(int initMinUs, int initMaxUs)
+{
+    minUs = initMinUs;
+    maxUs = initMaxUs;
+}

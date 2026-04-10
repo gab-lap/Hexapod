@@ -25,9 +25,9 @@ struct LegAngles {
 };
 
 struct LegPhysicalData {
-    const float coxaLength = 46.4f; // R
-    const float femurLength = 115.0f;
-    const float tibiaLength = 200.0f;
+    const float coxaLength = 45.1f; // R
+    const float femurLength = 100.0f;
+    const float tibiaLength = 174.0f;
     // If leg on the right set to 1, else to -1
     int position_multiplier = 0;
     // 1 for Front, 0 for Mid, -1 for Back
@@ -35,7 +35,7 @@ struct LegPhysicalData {
 
     float coxaToRobotCenter = 0.0f;
     float globalLegMountAngle = 0.0f;
-    float bearingCapToPatternBasePlate = 10.1f;
+    float bearingCapToPatternBasePlate = 6.0f;
 
     LegPhysicalData(float initCoxaToRobotCenter, float initGlobalLegMountAngle, float initPositionMultiplier, float rotationMultiplier)
         : coxaToRobotCenter(initCoxaToRobotCenter), globalLegMountAngle(initGlobalLegMountAngle), position_multiplier(initPositionMultiplier), rotation_multiplier(rotationMultiplier) {}
@@ -46,7 +46,7 @@ struct LegWalkingData {
     int cycleProgress = 0;
     Vector3 cycleStartPoint;
     Vector3 currentLegPosition;
-    const float distanceFromCenter = 200.0f;
+    const float distanceFromCenter = 160.0f;
     float pushFraction;
 };
 
@@ -64,7 +64,7 @@ struct RobotLegs {
 
 struct RobotPhysicalData {
     float height = 0; // bearingCapToPatternBasePlate
-    float distanceFromGround = -120;
+    float distanceFromGround = -100;
 };
 
 struct JoystickDataStream {

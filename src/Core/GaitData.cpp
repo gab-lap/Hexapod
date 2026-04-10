@@ -10,8 +10,8 @@ namespace Gaits {
         150.0f,             // maxStepLength
         80.0f,              // maxRotationLength
         100.0f,             // liftHeight
-        1.1f,              // stepLengthMultiplier
-        1.1f               // cycleSpeedMultiplier
+        0.50f,              // stepLengthMultiplier
+        0.50f               // cycleSpeedMultiplier
     };
 
     const GaitData Ripple = {

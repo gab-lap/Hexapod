@@ -19,3 +19,9 @@ void DriverServo::WriteAngle(float angle)
     int ticks = (int)(pulseUs * 4096.0 / 20000.0);
     _pwmDriver->setPWM(_channel, 0, ticks);
 }
+
+void DriverServo::SetMicroseconds(int initMinUs, int initMaxUs)
+{
+    minUs = initMinUs;
+    maxUs = initMaxUs;
+}
