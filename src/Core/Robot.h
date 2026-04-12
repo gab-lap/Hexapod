@@ -17,7 +17,7 @@ public:
     State<Robot>* idleState;
     RobotWalkState walkState;
     RobotPhysicalData physicalData; // to add more variables, so far only height
-    const GaitData* currentGait;
+    /*const*/ GaitData* currentGait;
     RC_Transmitter transmitter;
     // add legs, maybe in a struct?
     RobotLegs robotLegs;
@@ -25,7 +25,7 @@ public:
     Robot(RobotPhysicalData initPhysicalData, RobotLegs initRobotLegs);
     void Begin();
     void Update();
-    void ChangeGait(const GaitData* newGait);
+    void ChangeGait(/*const*/ GaitData* newGait);
     Leg* getLeg(int index);
 };
 

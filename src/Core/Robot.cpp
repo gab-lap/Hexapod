@@ -28,11 +28,20 @@ void Robot::Begin()
 void Robot::Update()
 {
     transmitter.Update();
+    //Serial.print(" transmitter.isJ2Clicked(): ");Serial.println(transmitter.isJ2Clicked());
+
+    if(!transmitter.isConnected()) {
+        Serial.println(" YEEPING FOR LACK OF CONNECtiON");
+        if (stateMachine.currentState != &sleepState) {
+            stateMachine.ChangeState(&sleepState);
+        }
+    }
+
     if (stateMachine.currentState != nullptr)
         stateMachine.currentState->Update();
 }
 
-void Robot::ChangeGait(const GaitData* newGait)
+void Robot::ChangeGait(/*const*/ GaitData* newGait)
 {
     currentGait = newGait;
     // update pushFraction in leg every time robot changes state

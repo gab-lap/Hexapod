@@ -33,7 +33,7 @@ struct GaitData {
 };
 
 namespace Gaits {
-    extern const GaitData Tripod;
+    extern /*const*/ GaitData Tripod;
     extern const GaitData Ripple;
     extern const GaitData Wave;
     extern const GaitData Bi;

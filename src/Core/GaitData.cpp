@@ -1,7 +1,7 @@
 #include "GaitData.h"
 
 namespace Gaits {
-    const GaitData Tripod = {
+    /*const*/ GaitData Tripod = {
         TRIPOD,     // Type
         "Tripod",   // Name
         {0.5f, 0.0f, 0.5f, 0.0f, 0.5f, 0.0f}, // MR, FR, and so on counterclockwise...
@@ -11,7 +11,7 @@ namespace Gaits {
         80.0f,              // maxRotationLength
         100.0f,             // liftHeight
         0.50f,              // stepLengthMultiplier
-        0.50f               // cycleSpeedMultiplier
+        0.75f               // cycleSpeedMultiplier
     };
 
     const GaitData Ripple = {

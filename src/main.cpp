@@ -46,7 +46,7 @@ void setup() {
     //midRightLeg->joint1->SetMicroseconds(620, 2500); midRightLeg->joint2->SetMicroseconds(500, 2400); midRightLeg->joint3->SetMicroseconds(450, 2400);
     //frontRightLeg->joint1->SetMicroseconds(600, 2420); frontRightLeg->joint2->SetMicroseconds(500, 2500); frontRightLeg->joint3->SetMicroseconds(500, 2500);
     //frontLeftLeg->joint1->SetMicroseconds(500, 2500); frontLeftLeg->joint2->SetMicroseconds(500, 2500); frontLeftLeg->joint3->SetMicroseconds(500, 2500);
-    //midLeftLeg->joint1->SetMicroseconds(500, 2500); midLeftLeg->joint2->SetMicroseconds(500, 2400); midLeftLeg->joint3->SetMicroseconds(500, 2500);
+    //midLeftLeg->joint1->SetMicroseconds(500, 2400); midLeftLeg->joint2->SetMicroseconds(500, 2400); midLeftLeg->joint3->SetMicroseconds(500, 2500);
     //backLeftLeg->joint1->SetMicroseconds(500, 2500); backLeftLeg->joint2->SetMicroseconds(500, 2500); backLeftLeg->joint3->SetMicroseconds(500, 2500);
     //backRightLeg->joint1->SetMicroseconds(500, 2400); backRightLeg->joint2->SetMicroseconds(500, 2500); backRightLeg->joint3->SetMicroseconds(500, 2500);
     
@@ -155,15 +155,19 @@ void loop() {
         input.trim();
 
         if (input.length() > 0) {
+            if (input.toFloat() >= 0.0 && input.toFloat() <= 1.5) {
+                robot->currentGait->cycleSpeedMultiplier = input.toFloat();
+            }
+            
             // Trigger the state change
-            int switch_var = 0;
+            /*int switch_var = 0;
             if (input == "1")
                 switch_var = 1;
 
             for (int i = 0; i < 6; i++) {
                 allLegs[i]->ONorOFF = switch_var;
             }
-            Serial.println("Input received! Changing states...");
+            Serial.println("Input received! Changing states...");*/
         }
     }
 }

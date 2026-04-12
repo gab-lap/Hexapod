@@ -10,7 +10,7 @@ void RobotSleepState::Enter()
     Serial.println("Robot Sleeping\n");
     for (int i = 0; i < NUM_LEGS; i++) {
         Leg* leg = owner.getLeg(i);
-        
+        leg->ONorOFF = 0;
         leg->walkingData.cycleStartPoint = leg->walkingData.currentLegPosition;
     }
 }
@@ -31,10 +31,11 @@ void RobotSleepState::Update()
     }
 
 
-    if (owner.getLeg(0)->ONorOFF == 1) {
+    if (owner.transmitter.isJ2Clicked()) {
         stateMachine.ChangeState(&owner.walkState);
         return;
     }
+
 
     if (owner.getLeg(0)->ONorOFF == 0) {
         for (int i = 0; i < NUM_LEGS; i++) {

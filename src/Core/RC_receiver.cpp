@@ -29,5 +29,28 @@ void RC_Transmitter::Update() {
         // Read the data and update the struct
         _radio.read(&_currentData, sizeof(RC_TransmitterData));
         _lastReceiveTime = millis();
+        
+        // J1 press
+        if (_currentData.j1b == 0 && _lastJ1bState == 1) {
+            _j1bJustPressed = true;
+        } else {
+            _j1bJustPressed = false;
+        }
+
+        _lastJ1bState = _currentData.j1b;
+
+        // J2 press
+        if (_currentData.j2b == 0 && _lastJ2bState == 1) {
+            _j2bJustPressed = true;
+        } else {
+            _j2bJustPressed = false;
+        }
+
+        _lastJ2bState = _currentData.j2b;
+
+    }
+    else {
+        _j1bJustPressed = false;
+        _j2bJustPressed = false;
     }
 }

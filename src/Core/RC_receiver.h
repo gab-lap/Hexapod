@@ -16,6 +16,8 @@ struct RC_TransmitterData {
     uint8_t j1y = 0;
     uint8_t j2x = 0;
     uint8_t j2y = 0;
+    uint8_t j1b : 1;
+    uint8_t j2b : 1;
 };
 
 
@@ -23,6 +25,10 @@ class RC_Transmitter {
 private:
     RF24 _radio;
     RC_TransmitterData _currentData;
+    uint8_t _lastJ1bState = 1;
+    bool _j1bJustPressed = false;
+    uint8_t _lastJ2bState = 1;
+    bool _j2bJustPressed = false;
     unsigned long _lastReceiveTime;
     uint8_t _address[6];
     
@@ -37,6 +43,9 @@ public:
     
     // Verify if RC transmitter is connected
     bool isConnected() { return (millis() - _lastReceiveTime) < 500; }
+
+    bool isJ1Clicked() const { return _j1bJustPressed; }
+    bool isJ2Clicked() const { return _j2bJustPressed; }
     
 };
 

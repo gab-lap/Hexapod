@@ -46,7 +46,7 @@ struct LegWalkingData {
     int cycleProgress = 0;
     Vector3 cycleStartPoint;
     Vector3 currentLegPosition;
-    const float distanceFromCenter = 160.0f;
+    const float distanceFromCenter = 170.0f;
     float pushFraction;
 };
 

@@ -14,6 +14,7 @@ void RobotWalkState::Enter()
     // Inizialize the cycle progress array {0.0f, 0.5f, ...} dependeing on the current Gait
     for (int i = 0; i < NUM_LEGS; i++) {
         Leg* leg = owner.getLeg(i);
+        leg->ONorOFF = 1;
         leg->walkingData.cycleProgress = owner.currentGait->cycleOffsets[i] * _points;
 
         // Force legs into walking state when robot enters walk state
@@ -26,13 +27,15 @@ void RobotWalkState::Enter()
 
 void RobotWalkState::Update()
 {
+    const RC_TransmitterData& transmitterData = owner.transmitter.GetData();  
+    
     // ricorda di definire logica di cambio stato
-    if (owner.getLeg(0)->ONorOFF == 0) {
+    //Serial.print(" owner.transmitter.isJ2Clicked(): ");Serial.println(owner.transmitter.isJ2Clicked());
+    if (owner.transmitter.isJ2Clicked()) {
         stateMachine.ChangeState(&owner.sleepState);
         return;
     }
 
-    const RC_TransmitterData& transmitterData = owner.transmitter.GetData();  
 
     int rawLeftJoystickX = transmitterData.j1x;
     int rawLeftJoystickY = transmitterData.j1y;
