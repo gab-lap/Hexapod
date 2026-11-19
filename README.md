@@ -26,6 +26,13 @@ Everything in the motion chain is written from scratch: inverse kinematics, Béz
 | 18 hobby servos (3 per leg) | Coxa, femur, tibia joints |
 | nRF24L01 | Receives the controller packets |
 
+<p align="center">
+  <img src="docs/media/Assembly.png" width="100%" alt="Hexapod CAD render - low angle">
+</p>
+<p align="center">
+  <img src="docs/media/Assembly2.png" width="100%" alt="Hexapod CAD render - top-down view">
+</p>
+
 <!-- TODO: servo model, battery/BEC and power wiring, frame material (3D-printed? CAD link?), photo of the electronics -->
 
 **Leg geometry** (from `include/config.h`): coxa 45.1 mm, femur 100 mm, tibia 174 mm. Default foot distance from the body is 170 mm, default ground distance is -100 mm.
