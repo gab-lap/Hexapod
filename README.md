@@ -8,8 +8,7 @@ Firmware for a six-legged, 18-servo walking robot, written in C++ on an ESP32 (A
 
 Everything in the motion chain is written from scratch: inverse kinematics, Bézier foot trajectories, gait scheduling, hierarchical state machines, and the radio receiver. The only libraries used are for the servo driver, the ESP32 servo PWM and the nRF24 radio.
 
-<details>
-<summary><strong>Jump to Section</strong> — Hardware, Kinematics, Radio & Setup</summary>
+## Table of Contents
 
 - [What it does](#what-it-does)
 - [Hardware](#hardware)
@@ -27,8 +26,6 @@ Everything in the motion chain is written from scratch: inverse kinematics, Béz
 - [Status](#status)
 - [Used in A.T.I.D.E.](#used-in-atide)
 - [License](#license)
-
-</details>
 
 ## What it does
 
