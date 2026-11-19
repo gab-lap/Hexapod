@@ -231,4 +231,4 @@ This robot is the hardware side of [A.T.I.D.E.](https://github.com/gab-lap/A.T.I
 
 ## License
 
-<!-- TODO: add a LICENSE file (MIT, like A.T.I.D.E.?) and name it here -->
+This project is licensed under the [MIT License](LICENSE).
